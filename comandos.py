@@ -33,28 +33,31 @@ def dividir_comandos(text: str) -> list:
 # Chequeo de todos los posibles comandos
 # ======================================
 
-def chequeo_defvar(text: str, variables: list) -> bool:
+def chequeo_defvar(text: str, variables: list) -> str | None:
     """
     Verifica si el comando de declaración de variable es válido.
 
     :param text: El comando a verificar.
     :param variables: La lista de variables existentes.
-    :return: Verdadero si el comando es válido, de lo contrario Falso.
+    :return: El nombre de la variable si el comando es válido, de lo contrario None.
     """
     tokens = dividir_comandos(text)
 
     if len(tokens) != 3 or tokens[0] != "defvar":
-        return False
+        return None
 
     # El nombre no puede iniciar con un número
     if tokens[1][0].isnumeric():
-        return False
+        return None
 
     # Ya existe una variable con ese nombre
     if tokens[1] in variables or tokens[1] in CONSTANTES:
-        return False
+        return None
 
-    return tokens[2].isnumeric() or tokens[2] in CONSTANTES or tokens[2] in variables
+    if tokens[2].isnumeric() or tokens[2] in CONSTANTES or tokens[2] in variables:
+        return tokens[1]
+
+    return None
 
 
 def chequeo_asignacion(text: str, variables: list) -> bool:
@@ -188,3 +191,25 @@ def rev_null(text: str):
     tokens = dividir_comandos(text)
 
     return len(tokens) == 1 and tokens[0] == "null"
+
+
+def chequeo_ejecucion_funcion(text: str, variables: list, funciones: list) -> bool:
+    tokens = dividir_comandos(text)
+
+    if len(tokens) == 0 or tokens[0] not in funciones:
+        return False
+
+    return all(map(lambda x: x in variables or x in CONSTANTES, tokens[1:]))
+
+
+# No se verifica defvar por su condicion especial
+def es_comando_valido(texto: str, variables: list, funciones: list) -> bool:
+    return (chequeo_asignacion(texto, variables) or 
+            chequeo_move_skip(texto, variables) or 
+            chequeo_rotacion(texto) or 
+            chequeo_pick_put(texto) or 
+            chequeo_movimiento_direccion(texto, variables) or 
+            chequeo_lista_direcciones(texto) or 
+            chequeo_encarar_mover(texto, variables) or 
+            rev_null(texto) or 
+            chequeo_ejecucion_funcion(texto, variables, funciones))

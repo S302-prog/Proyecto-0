@@ -1,23 +1,12 @@
 from comandos import chequeo_pick_put
-import re
-
-
-def procesar_bloque(bloque: str) -> bool:
-    if len(bloque) < 2:
-        return False
-    bloques = re.findall(r"(.*)", bloque)
-
-    print(bloques)
-
-    return True
+from bloques import obtener_bloques
+from estructura_control import chequeo_if
+from parser import validar
 
 
 if __name__ == "__main__":
-    print(chequeo_pick_put("put :balloons 3"))
-    print(chequeo_pick_put("pick :balloons 3"))
+    v = validar("tests/pruebas.txt")
+    print(v)
+    v = validar("tests/ejemploPDFcorregido.txt")
+    print(v)
 
-    bloque = open("tests/pruebas.txt").read()
-    print(procesar_bloque(bloque.strip()))
-
-    bloque = open("tests/ejemploPDFcorregido.txt").read()
-    print(procesar_bloque(bloque.strip()))
