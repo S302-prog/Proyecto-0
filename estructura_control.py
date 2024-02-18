@@ -87,7 +87,6 @@ def chequeo_ciclo(text: str, variables: list) -> bool:
 
     return condicion_valida and then and otherwise
 
-
 def chequeo_repetir(text: str, variables: list) -> bool:
     comandos = dividir_comandos(text)
 
@@ -100,7 +99,7 @@ def chequeo_repetir(text: str, variables: list) -> bool:
 
     if len(bloques) != 3:
         return False
-
+    
     condicion_valida = bloques[1] in CONSTANTES or bloques[1] in variables or bloques[1].isnumeric()
     otherwise = validar_estructura_bloque(bloques[2])
 
@@ -114,8 +113,11 @@ def chequeo_funcion(text: str, variables: list) -> str | None:
     if len(comandos) < 1 or comandos[0] != "defun":
         return False
     
-    if comandos[1].isanumeric():
+    try:
+        int(comandos[1])
         return False
+    except:
+        pass
     
     for parametros in comandos[2:]:
         if parametros not in CONSTANTES or parametros not in CONDICIONES:
@@ -123,7 +125,9 @@ def chequeo_funcion(text: str, variables: list) -> str | None:
         else:
             lista_comandos.append(parametros)
 
-    return all(es_comando_valido(comando) for comando in lista_comandos)
+    res = all(es_comando_valido(comando) for comando in lista_comandos)
+    
+    return res
 
 def es_estructura_valida(text: str, variables: list, funciones: list) -> bool:
     return True
