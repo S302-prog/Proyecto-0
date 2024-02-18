@@ -113,13 +113,15 @@ def chequeo_funcion(text: str, variables: list) -> str | None:
     if len(comandos) < 1 or comandos[0] != "defun":
         return False
     
+    bloques = obtener_bloques(text.strip())
+    
     try:
-        int(comandos[1])
+        int(bloques[1])
         return False
     except:
         pass
     
-    for parametros in comandos[2:]:
+    for parametros in bloques[2:]:
         if parametros not in CONSTANTES or parametros not in CONDICIONES:
             lista_parametros.append(parametros)
         else:
