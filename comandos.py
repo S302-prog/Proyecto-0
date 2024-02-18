@@ -71,7 +71,7 @@ def chequeo_defvar(text: str, variables: list) -> str | None:
         return None
 
     # El nombre no puede iniciar con un número
-    if tokens[1][0].isnumeric():
+    if tokens[1][0].isnumeric() or not tokens[1].isalnum():
         return None
 
     # Ya existe una variable con ese nombre
