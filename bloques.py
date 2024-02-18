@@ -32,7 +32,7 @@ def solo_un_bloque(text: str) -> bool:
 
 
 
-def obtener_bloques(text: str) -> list | None:
+def obtener_bloques(text: str) -> list[str] | None:
 	if not validar_estructura_bloque(text.strip()):
 		return None
 

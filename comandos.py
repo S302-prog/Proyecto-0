@@ -12,7 +12,7 @@ lista creada seria poner un or en lo try-except en
 """
 
 
-def dividir_comandos(text: str) -> list:
+def dividir_comandos(text: str) -> list[str]:
     """
     Divide el texto dado en una lista de comandos separados.
     El texto debe ser un bloque de profundidad 1

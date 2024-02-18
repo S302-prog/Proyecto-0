@@ -1,6 +1,4 @@
-from comandos import chequeo_pick_put
-from bloques import obtener_bloques
-from estructura_control import chequeo_if
+from estructura_control import chequeo_condicion
 from parser import validar
 
 
@@ -9,4 +7,3 @@ if __name__ == "__main__":
     print(v)
     v = validar("tests/ejemploPDFcorregido.txt")
     print(v)
-

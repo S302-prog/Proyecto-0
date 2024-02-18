@@ -1,8 +1,63 @@
 from comandos import dividir_comandos
 from bloques import obtener_bloques, validar_estructura_bloque
+from lenguaje import CONDICIONES, CONSTANTES, ORIENTACIONES, OBJETOS
 
-def chequeo_condicion(text: str, variables: list) -> bool:    
-    return True
+def chequeo_condicion(text: str, variables: list) -> bool:
+    partes = dividir_comandos(text.strip())
+
+    if len(partes) == 0:
+        return False
+
+    first = partes[0]
+
+    if first[len(first) - 1] == "?":
+        partes.pop(0)
+        partes.insert(0, "?")
+        partes.insert(0, first[:-1])
+
+    if partes[0] not in CONDICIONES:
+        return False
+
+    if partes[0] != "not" and partes[1] != "?":
+        return False
+
+    if partes[0] == "not":
+        bloques = obtener_bloques(text)
+        if bloques is None or len(bloques) != 1:
+            return False
+        return chequeo_condicion(bloques[0], variables)
+
+    if partes[0] == "facing":
+        if len(partes) != 3:
+            return False
+        return partes[2] in ORIENTACIONES
+
+    if partes[0] == "blocked":
+        return len(partes) == 2
+
+    if partes[0] in ["can-put", "can-pick"]:
+        if len(partes) != 4:
+            return False
+
+        if partes[2] not in OBJETOS:
+            return False
+
+        return partes[3].isnumeric() or partes[3] in CONSTANTES or partes[3] in variables
+
+    if partes[0] == "can-move":
+        if len(partes) != 3:
+            return False
+
+        return partes[2] in ORIENTACIONES
+
+    if partes[0] == "isZero":
+        if len(partes) != 3:
+            return False
+
+        return partes[2].isnumeric() or partes[2] in CONSTANTES or partes[2] in variables
+
+
+    return False
 
 
 def chequeo_if(text: str, variables: list) -> bool:
