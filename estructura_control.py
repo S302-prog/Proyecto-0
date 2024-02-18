@@ -11,9 +11,6 @@ def chequeo_condicion(text: str, variables: list) -> bool:
     if partes[0] not in CONDICIONES:
         return False
 
-    if partes[0] != "not" and partes[1] != "?":
-        return False
-
     if partes[0] == "not":
         bloques = obtener_bloques(text)
         if bloques is None or len(bloques) != 1:
