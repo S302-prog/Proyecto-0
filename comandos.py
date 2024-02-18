@@ -26,7 +26,31 @@ def dividir_comandos(text: str) -> list[str]:
 
     lista = re.split(r"[,()\s]", text)
 
-    return [elem for elem in lista if elem]
+    prev = [elem for elem in lista if elem]
+
+    if ":" in prev:
+        existe = prev.index(":")
+
+        if existe < len(prev) - 1:
+            siguiente = prev[existe + 1]
+            prev.pop(existe)
+            prev.pop(existe)
+            prev.insert(existe, f":{siguiente}")
+
+    
+    if "?" not in prev:
+        return prev
+
+    existe = prev.index("?")
+
+    if existe != 0:
+        anterior = prev[existe - 1]
+        prev.pop(existe - 1)
+        prev.pop(existe - 1)
+        prev.insert(existe - 1, f"{anterior}?")
+
+    return prev
+
 
 
 # ======================================

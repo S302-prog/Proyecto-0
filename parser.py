@@ -13,7 +13,7 @@ class Resultado:
 		self.informacion = informacion
 
 
-def validar_instruccion(texto: str, variables: list, funciones: list) -> tuple:
+def validar_instruccion(texto: str, variables: list, funciones: list) -> tuple[bool, str, str]:
 	validacion_variable = comandos.chequeo_defvar(texto.strip(), variables)
 
 	if validacion_variable is not None:
@@ -67,13 +67,13 @@ def validar_bloque(texto: str, variables: list, funciones: list) -> Resultado:
 	return resultado
 
 
-def validar(archivo: str) -> bool:
+def validar(archivo: str) -> tuple[bool, list[str], list[str]]:
 	info = open(archivo, "r")
 	codigo = info.read().strip()
 	info.close()
 
 	if not validar_estructura_bloque(codigo):
-		return False
+		return (False, [], [])
 
 	variables = []
 	funciones = []
@@ -82,7 +82,7 @@ def validar(archivo: str) -> bool:
 	partes = obtener_bloques(codigo)
 
 	if partes is None:
-		return False
+		return (False, [], [])
 
 	for parte in partes:
 		resultado = validar_bloque(parte, variables, funciones)
@@ -94,4 +94,4 @@ def validar(archivo: str) -> bool:
 		elif resultado.tipo == "DEFUN":
 			funciones.append(resultado.informacion)
 
-	return valido
+	return (valido, variables, funciones)

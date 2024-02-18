@@ -1,4 +1,3 @@
-from estructura_control import chequeo_condicion
 from parser import validar
 
 

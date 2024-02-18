@@ -8,13 +8,6 @@ def chequeo_condicion(text: str, variables: list) -> bool:
     if len(partes) == 0:
         return False
 
-    first = partes[0]
-
-    if first[len(first) - 1] == "?":
-        partes.pop(0)
-        partes.insert(0, "?")
-        partes.insert(0, first[:-1])
-
     if partes[0] not in CONDICIONES:
         return False
 
