@@ -6,11 +6,6 @@ from lenguaje import ROTACIONES
 from lenguaje import CONSTANTES
 from lenguaje import OBJETOS
 
-"""
-Toca crear lista que guarde las variables que se creen con defvar ya que estas también pueden ser n y con esa 
-lista creada seria poner un or en lo try-except en
-"""
-
 
 def dividir_comandos(text: str) -> list[str]:
     """
@@ -50,8 +45,6 @@ def dividir_comandos(text: str) -> list[str]:
         prev.insert(existe - 1, f"{anterior}?")
 
     return prev
-
-
 
 # ======================================
 # Chequeo de todos los posibles comandos
