@@ -69,7 +69,7 @@ def validar_bloque(texto: str, variables: list, funciones: list) -> Resultado:
 
 def validar(archivo: str) -> tuple[bool, list[str], list[str]]:
 	info = open(archivo, "r")
-	codigo = info.read().strip()
+	codigo = info.read().lower().strip()
 	info.close()
 
 	if not validar_estructura_bloque(codigo):
