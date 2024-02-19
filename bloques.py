@@ -1,3 +1,14 @@
+class Resultado:
+	valido: bool
+	tipo: str
+	informacion: str | tuple[str, int]
+
+	def __init__(self, valido: bool, tipo: str, informacion: str | tuple[str, int]) -> None:
+		self.valido = valido
+		self.tipo = tipo
+		self.informacion = informacion
+		
+
 def validar_estructura_bloque(text: str) -> bool:
 	if len(text.strip()) < 2:
 		return False

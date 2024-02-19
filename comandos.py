@@ -129,7 +129,7 @@ def chequeo_rotacion(text: str) -> bool:
     return tokens[1] in opciones
 
 
-def chequeo_pick_put(text: str):
+def chequeo_pick_put(text: str, variables: list[str]):
     """
     Verifica si el comando de interacción dado es válido.
     Args:
@@ -142,7 +142,7 @@ def chequeo_pick_put(text: str):
     if len(tokens) != 3 or tokens[0] not in ["put", "pick"] or tokens[1] not in OBJETOS:
         return False
 
-    return tokens[2].isnumeric() or tokens[2] in CONSTANTES
+    return tokens[2].isnumeric() or tokens[2] in CONSTANTES or tokens[2] in variables
 
 
 def chequeo_movimiento_direccion(text: str, variables: list) -> bool:
@@ -154,11 +154,10 @@ def chequeo_movimiento_direccion(text: str, variables: list) -> bool:
     :return: Verdadero si el comando es válido, de lo contrario Falso.
     """
     tokens = dividir_comandos(text)
-
     if len(tokens) != 3 or tokens[0] != "move-dir":
         return False
 
-    if not tokens[1].isnumeric() or tokens[1] not in variables:
+    if (not tokens[1].isnumeric()) and (tokens[1] not in variables):
         return False
 
     return tokens[2] in DIRECCIONES
@@ -172,7 +171,6 @@ def chequeo_lista_direcciones(text: str) -> bool:
     :return: Verdadero si el comando es válido, de lo contrario Falso.
     """
     tokens = dividir_comandos(text)
-
     if len(tokens) < 2 or tokens[0] != "run-dirs":
         return False
 
@@ -192,7 +190,7 @@ def chequeo_encarar_mover(text: str, variables: list) -> bool:
     if len(tokens) != 3 or tokens[0] != "move-face":
         return False
 
-    if tokens[1] not in variables or not tokens[1].isnumeric():
+    if tokens[1] not in variables and not tokens[1].isnumeric():
         return False
 
     return tokens[2] in ORIENTACIONES
@@ -210,13 +208,15 @@ def rev_null(text: str):
     return len(tokens) == 1 and tokens[0] == "null"
 
 
-def chequeo_ejecucion_funcion(text: str, variables: list, funciones: list) -> bool:
+def chequeo_ejecucion_funcion(text: str, variables: list[str], funciones: list[tuple[str, int]]) -> bool:
     tokens = dividir_comandos(text)
 
-    if len(tokens) == 0 or tokens[0] not in funciones:
+    disponibles = dict(funciones)
+
+    if len(tokens) == 0 or tokens[0] not in disponibles:
         return False
 
-    return all(map(lambda x: x in variables or x in CONSTANTES, tokens[1:]))
+    return len(tokens) == disponibles[tokens[0]] + 1
 
 
 # No se verifica defvar por su condicion especial
@@ -224,7 +224,7 @@ def es_comando_valido(texto: str, variables: list, funciones: list) -> bool:
     return (chequeo_asignacion(texto, variables) or 
             chequeo_move_skip(texto, variables) or 
             chequeo_rotacion(texto) or 
-            chequeo_pick_put(texto) or 
+            chequeo_pick_put(texto, variables) or 
             chequeo_movimiento_direccion(texto, variables) or 
             chequeo_lista_direcciones(texto) or 
             chequeo_encarar_mover(texto, variables) or 
